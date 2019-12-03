@@ -101,15 +101,16 @@ class App extends React.Component {
       return t._id === id
     })
     
-    // long-winded way
-    let cloned = [...this.state.tasks];
-    let clonedTask = {
-      ...this.state.tasks[index]
-    }
-    clonedTask.done = !clonedTask.done;
-    
-    cloned[index] = clonedTask;
-    
+    let cloned = [
+        ...this.state.tasks.slice(0, index), // spread out the elements from index 0, to index -1
+        {
+          ...this.state.tasks[index],  // insert the changed copy
+          done: !this.state.tasks[index].done
+        },
+        ...this.state.tasks.slice(index+1) // spread out the elements after the modified copy
+      
+      ];
+      
     this.setState({
       tasks:cloned
     })
