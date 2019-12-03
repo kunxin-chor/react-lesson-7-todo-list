@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bulma/css/bulma.css'
+import EditTask from './components/EditTask'
 
 
 class App extends React.Component {
@@ -21,23 +23,36 @@ class App extends React.Component {
         done: true
       }
     ],
-    newTodoTitle:""
+    newTodoTitle:"",
+    editing:false
   }
   
   displayList() {
     
     let final = [];
     for (let task of this.state.tasks) {
+      
       final.push(<li>{task.title} - 
       <input type='checkbox' checked={task.done} onChange={()=>{
         this.updateTodo(task._id)
       }}/>
       
       <button
-        onClick={()=>{
+        onClick={
+        ()=>{
           this.deleteTodo(task._id)
-        }}
-      >x</button></li>)
+        }}  
+        style={{marginLeft:'5px'}}
+        >x</button>
+        
+      <button onClick={()=>{
+        this.showEdit(task)
+      }}>Edit</button>  
+      
+        <EditTask current_edit_id={this.state.editing} task={task}/>
+        </li>
+      
+      )
     }
     return final;
     
@@ -116,9 +131,16 @@ class App extends React.Component {
     })
   }
   
+  showEdit =(task) => {
+    this.setState({
+      editing: task._id
+    })
+  }
+  
   render(){
     return (
-     <div>
+     <div className='container content'>
+   
       <h1>Todos</h1>
       <ul>
         {this.displayList()}
