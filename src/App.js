@@ -45,18 +45,32 @@ class App extends React.Component {
   
   addTodo = () => {
     // add to the back of an array
+   
     // IMMUTABILITY
-    let cloned = [...this.state.tasks];
-    let newTodo = {
-      _id:333,
-      title: this.state.newTodoTitle,
-      done:false
-    }
-    cloned.push(newTodo);
+    const cloned = [
+       ...this.state.tasks,
+       {
+         _id:333,
+         title: this.state.newTodoTitle,
+         done:false
+       }
+      ]
+    
     this.setState({
       tasks:cloned
     })
+    
+
+    // this.setState({
+    //   tasks: [...this.state.tasks, {
+    //     _id: 333,
+    //     title: this.state.newTodoTitle,
+    //     done:false
+    //   }]
+    // })
+    
   }
+  
   
   render(){
     return (
