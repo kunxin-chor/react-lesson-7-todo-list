@@ -28,7 +28,12 @@ class App extends React.Component {
     
     let final = [];
     for (let task of this.state.tasks) {
-      final.push(<li>{task.title} - {task.done ? 'Done' : 'Not Done'} <button
+      final.push(<li>{task.title} - 
+      <input type='checkbox' checked={task.done} onChange={()=>{
+        this.updateTodo(task._id)
+      }}/>
+      
+      <button
         onClick={()=>{
           this.deleteTodo(task._id)
         }}
@@ -77,20 +82,34 @@ class App extends React.Component {
   
   deleteTodo = (id) => {
     // long-wided way
-    console.log("id to delete ="+ id)
     
-    // step 1. Find the index
-    let index = -1; // means not found
-    for (let i=0; i < this.state.tasks.length; i++) {
-      if (this.state.tasks[i]._id === id) {
-        index=i;
-        break;
-      }
-    }
-    console.log("to delete =" + index)
-    // Step 2. Clone the array, and then splice the clone at the index
+    let index = this.state.tasks.findIndex((t)=>{
+      return t._id === id;
+    })
+    
+    const cloned = [...this.state.tasks]
+  
+    cloned.splice(index,1);
+    this.setState({
+      tasks:cloned
+    })
+    
+  }
+  
+  updateTodo = (id) => {
+    let index = this.state.tasks.findIndex((t)=>{
+      return t._id === id
+    })
+    
+    // long-winded way
     let cloned = [...this.state.tasks];
-    cloned.splice(index, 1);
+    let clonedTask = {
+      ...this.state.tasks[index]
+    }
+    clonedTask.done = !clonedTask.done;
+    
+    cloned[index] = clonedTask;
+    
     this.setState({
       tasks:cloned
     })
