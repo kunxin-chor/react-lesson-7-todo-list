@@ -28,7 +28,11 @@ class App extends React.Component {
     
     let final = [];
     for (let task of this.state.tasks) {
-      final.push(<li>{task.title} - {task.done ? 'Done' : 'Not Done'}</li>)
+      final.push(<li>{task.title} - {task.done ? 'Done' : 'Not Done'} <button
+        onClick={()=>{
+          this.deleteTodo(task._id)
+        }}
+      >x</button></li>)
     }
     return final;
     
@@ -71,6 +75,26 @@ class App extends React.Component {
     
   }
   
+  deleteTodo = (id) => {
+    // long-wided way
+    console.log("id to delete ="+ id)
+    
+    // step 1. Find the index
+    let index = -1; // means not found
+    for (let i=0; i < this.state.tasks.length; i++) {
+      if (this.state.tasks[i]._id === id) {
+        index=i;
+        break;
+      }
+    }
+    console.log("to delete =" + index)
+    // Step 2. Clone the array, and then splice the clone at the index
+    let cloned = [...this.state.tasks];
+    cloned.splice(index, 1);
+    this.setState({
+      tasks:cloned
+    })
+  }
   
   render(){
     return (
