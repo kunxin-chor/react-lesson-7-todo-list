@@ -23,7 +23,6 @@ class App extends React.Component {
         done: true
       }
     ],
-    newTodoTitle:"",
     taskBeingEdited:{
       
     },
@@ -152,10 +151,39 @@ class App extends React.Component {
     })
   }
   
+  confirmTodoChange = () => {
+    let id = this.state.taskBeingEdited._id;
+    
+    // find the index
+      let index = this.state.tasks.findIndex((t)=>{
+      return t._id === id
+    })
+    
+    let cloned = [
+        ...this.state.tasks.slice(0, index), // spread out the elements from index 0, to index -1
+        {
+          ...this.state.tasks[index],  // insert the changed copy
+          title: this.state.taskBeingEdited.title
+        },
+        ...this.state.tasks.slice(index+1) // spread out the elements after the modified copy
+      
+      ];
+      
+    this.setState({
+      tasks:cloned
+    })
+    
+  }
+  
   render(){
     return (
      <div className='container content'>
-      <EditTask cancel={this.cancel} show={this.state.editing} task={this.state.taskBeingEdited} handleChange={this.handleChange}/>
+      <EditTask 
+                confirmn={this.confirm}
+                cancel={this.cancel}
+                show={this.state.editing} 
+                task={this.state.taskBeingEdited} 
+                handleChange={this.handleChange}/>
       <h1>Todos</h1>
       <ul>
         {this.displayList()}
