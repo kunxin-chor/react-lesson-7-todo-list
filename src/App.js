@@ -23,7 +23,9 @@ class App extends React.Component {
         done: true
       }
     ],
-    newTodoTitle:"",
+    taskBeingEdited:{
+      
+    },
     editing:false
   }
   
@@ -49,7 +51,7 @@ class App extends React.Component {
         this.showEdit(task)
       }}>Edit</button>  
       
-        <EditTask current_edit_id={this.state.editing} task={task}/>
+      
         </li>
       
       )
@@ -133,14 +135,50 @@ class App extends React.Component {
   
   showEdit =(task) => {
     this.setState({
-      editing: task._id
+      editing: true,
+      taskBeingEdited: {
+        ...task
+      }
     })
+  }
+  
+  cancelEdit = () => {
+    this.setState({
+      editing:false
+    })
+  }
+  
+  confirmEdit = (id, newTitle) => {
+    let index = this.state.tasks.findIndex((t)=>{
+      return t._id === id
+    })
+    
+    let cloned = [
+        ...this.state.tasks.slice(0, index), // spread out the elements from index 0, to index -1
+        {
+          ...this.state.tasks[index],  // insert the changed copy
+          title: newTitle
+        },
+        ...this.state.tasks.slice(index+1) // spread out the elements after the modified copy
+      
+      ];
+      
+    this.setState({
+      tasks:cloned,
+      editing:false
+    })
+   
   }
   
   render(){
     return (
      <div className='container content'>
-   
+      <EditTask key={this.state.taskBeingEdited._id} 
+                show={this.state.editing} 
+                task={this.state.taskBeingEdited}
+                cancel={this.cancelEdit}
+                confirm={this.confirmEdit}
+                />
       <h1>Todos</h1>
       <ul>
         {this.displayList()}
