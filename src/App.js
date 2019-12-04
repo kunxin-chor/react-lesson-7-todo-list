@@ -24,6 +24,9 @@ class App extends React.Component {
       }
     ],
     newTodoTitle:"",
+    taskBeingEdited:{
+      
+    },
     editing:false
   }
   
@@ -49,7 +52,7 @@ class App extends React.Component {
         this.showEdit(task)
       }}>Edit</button>  
       
-        <EditTask current_edit_id={this.state.editing} task={task}/>
+      
         </li>
       
       )
@@ -63,7 +66,10 @@ class App extends React.Component {
   
   handleChange = (event) => {
     this.setState({
-      [event.target.name] : event.target.value
+      taskBeingEdited : {
+        ...this.state.taskBeingEdited,
+        title:event.target.value
+      }
     })
   }
   
@@ -133,14 +139,23 @@ class App extends React.Component {
   
   showEdit =(task) => {
     this.setState({
-      editing: task._id
+      editing: true,
+      taskBeingEdited: {
+        ...task
+      }
+    })
+  }
+  
+  cancel = () => {
+    this.setState({
+      editing:false
     })
   }
   
   render(){
     return (
      <div className='container content'>
-   
+      <EditTask cancel={this.cancel} show={this.state.editing} task={this.state.taskBeingEdited} handleChange={this.handleChange}/>
       <h1>Todos</h1>
       <ul>
         {this.displayList()}

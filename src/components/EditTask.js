@@ -5,7 +5,7 @@ export default function EditTask(props)
     
     // if show props is true, display the modal box
     let classString = "modal";
-    if (props.current_edit_id === props.task._id) {
+    if (props.show) {
         classString +=" is-active";
     }
     
@@ -15,14 +15,14 @@ export default function EditTask(props)
           <div className="modal-card">
             <header className="modal-card-head">
               <p className="modal-card-title">{props.task.title}</p>
-              <button className="delete" aria-label="close"></button>
+              <button className="delete" aria-label="close" onClick={props.cancel}></button>
             </header>
             <section className="modal-card-body">
-              <input type='text' value={props.task.title}/>
+              <input type='text' value={props.task.title} onChange={props.handleChange} onCancel={props.cancel}/>
             </section>
             <footer className="modal-card-foot">
               <button className="button is-success">Save changes</button>
-              <button className="button">Cancel</button>
+              <button className="button" onClick={props.cancel}>Cancel</button>
             </footer>
           </div>
         </div>
